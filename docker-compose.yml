@@ -2,20 +2,21 @@ services:
   postgres:
     image: postgres:17-alpine
     container_name: claims-platform-postgres
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: claims_platform
-      POSTGRES_USER: claims_user
-      POSTGRES_PASSWORD: claims_password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - claims-platform-postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U claims_user -d claims_platform"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
 volumes:
   claims-platform-postgres-data:
-

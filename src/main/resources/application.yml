@@ -2,9 +2,9 @@ spring:
   application:
     name: claims-platform
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/claims_platform}
-    username: ${DB_USERNAME:claims_user}
-    password: ${DB_PASSWORD:claims_password}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -32,4 +32,3 @@ management:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-

@@ -36,6 +36,14 @@ Maven does not need to be installed globally because the project includes Maven 
 
 ### Start PostgreSQL
 
+Create your local environment file:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Then edit `.env` and set your local database password.
+
 ```powershell
 docker compose up -d
 ```
@@ -65,18 +73,55 @@ docker compose up -d
 - Swagger UI: http://localhost:8080/swagger-ui.html
 - OpenAPI JSON: http://localhost:8080/v3/api-docs
 
+## MVP API
+
+### Customers
+
+- `POST /api/customers`
+- `GET /api/customers/{id}`
+
+### Policies
+
+- `POST /api/policies`
+- `GET /api/policies/{id}`
+
+### Claims
+
+- `POST /api/claims`
+- `GET /api/claims/{id}`
+- `GET /api/claims?status=REGISTERED`
+- `PATCH /api/claims/{id}/status`
+- `GET /api/claims/{id}/history`
+
+## Claim Lifecycle
+
+Supported statuses:
+
+- `REGISTERED`
+- `IN_REVIEW`
+- `APPROVED`
+- `REJECTED`
+- `CANCELLED`
+
+Initial transition rules:
+
+- A new claim starts as `REGISTERED`.
+- `REGISTERED` can move to `IN_REVIEW` or `CANCELLED`.
+- `IN_REVIEW` can move to `APPROVED`, `REJECTED`, or `CANCELLED`.
+- `APPROVED`, `REJECTED`, and `CANCELLED` are terminal states.
+
 ## Database Defaults
 
-The local Docker Compose database uses:
+The project does not store real database credentials in `application.yml`.
 
-- Database: `claims_platform`
-- Username: `claims_user`
-- Password: `claims_password`
-- Port: `5432`
+Local database values are loaded from `.env`, which is ignored by Git. Use `.env.example` as a template:
 
-These values can be overridden with:
-
+- `POSTGRES_DB`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
 - `DB_URL`
 - `DB_USERNAME`
 - `DB_PASSWORD`
 - `SERVER_PORT`
+
+For CI or cloud deployment, configure these values as environment variables or repository/environment secrets.
